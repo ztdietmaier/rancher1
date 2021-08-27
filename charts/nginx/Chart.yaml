@@ -1,0 +1,9 @@
+apiVersion: v2
+name: nginx_test
+description: nginx test
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.20"
