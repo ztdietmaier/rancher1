@@ -1,3 +1,14 @@
 apiVersion: v1
-entries: {}
-generated: 2016-10-06T16:23:20.499029981-06:00
+entries:
+  nginx_test:
+  - apiVersion: v2
+    appVersion: "1.20"
+    created: "2021-08-27T20:37:47.389140469Z"
+    description: nginx test
+    digest: 5a699e71d856a4110ae6d1ea5f900763da479b8accd77599478f7b9335d118d6
+    name: nginx_test
+    type: application
+    urls:
+    - https://github.com/ztdietmaier/rancher1/releases/download/nginx_test-0.1.0/nginx_test-0.1.0.tgz
+    version: 0.1.0
+generated: "2021-08-27T20:37:47.16357986Z"
