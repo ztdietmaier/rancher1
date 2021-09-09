@@ -79,7 +79,7 @@ jobs:
         script: |
           const secrets = {
             REGISTRY_PASSWORD: `${{ secrets.REGISTRY_PASSWORD }}`,
-            OPENSHIFT_SERVER: `${{ secrets.OPENSHIFT_SERVER }}`,
+            # OPENSHIFT_SERVER: `${{ secrets.OPENSHIFT_SERVER }}`,
             OPENSHIFT_TOKEN: `${{ secrets.OPENSHIFT_TOKEN }}`,
           };
 
