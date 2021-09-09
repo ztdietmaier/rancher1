@@ -153,7 +153,7 @@ jobs:
         openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
         openshift_token: ${{ env.OPENSHIFT_TOKEN }}
         insecure_skip_tls_verify: true
-        namespace: ${{ env.OPENSHIFT_NAMESPACE }}
+        namespace: zztdietmaier-dev
 
     # This step should create a deployment, service, and route to run your app and expose it to the internet.
     # https://github.com/redhat-actions/oc-new-app#readme
@@ -163,7 +163,7 @@ jobs:
       with:
         app_name: ${{ env.APP_NAME }}
         image: "nginx:latest"
-        namespace: "test1"
+        namespace: "zztdietmaier-dev"
         port: 80
 
     - name: View application route
