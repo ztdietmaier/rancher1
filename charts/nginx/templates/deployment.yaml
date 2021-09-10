@@ -28,3 +28,4 @@ spec:
           value: "sa"
         - name: DB_PASSWORD
           value: ""
+
