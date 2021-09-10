@@ -157,15 +157,13 @@ jobs:
         insecure_skip_tls_verify: true
         namespace: zztdietmaier-dev
         
-    - name: deploy chart
-      uses: 'deliverybot/helm@master'
-      with:
-        token: '${{ github.token }}'
-        chart: 'nginx'
-        namespace: zztdietmaier-dev
-        release: test1
-      env:
-        KUBECONFIG_FILE: '${{ secrets.KUBECONFIG }}'
+    - name: setup helm
+      uses: azure/setup-helm@v1
+      #uses: 'deliverybot/helm@master'
+      
+    - name: helm lint
+      run: "helm lint charts/nginx"
+      
 
     # This step should create a deployment, service, and route to run your app and expose it to the internet.
     # https://github.com/redhat-actions/oc-new-app#readme
