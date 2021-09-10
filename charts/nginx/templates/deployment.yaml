@@ -19,3 +19,12 @@ spec:
         image: camunda/camunda-bpm-platform:7.15.0
         ports:
         - containerPort: 8080
+        env:
+        - name: DB_URL
+          value: "jdbc:h2:mem:camunda;DB_CLOSE_DELAY=1000"
+        - name: DB_DRIVER
+          value: "org.h2.Driver"
+        - name: DB_USERNAME
+          value: "sa"
+        - name: DB_PASSWORD
+          value: ""
