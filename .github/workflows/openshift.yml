@@ -96,6 +96,6 @@ jobs:
       run: "helm lint charts/nginx"
       
     - name: helm install
-      run: "helm install ${{github.sha}} charts/nginx"
+      run: "helm upgrade --install nginx charts/nginx"
       
 
