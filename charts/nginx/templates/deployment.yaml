@@ -29,4 +29,6 @@ spec:
           value: "sa"
         - name: DB_PASSWORD
           value: ""
+        - name: FOO
+          value: BAR
 
