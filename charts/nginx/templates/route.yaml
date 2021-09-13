@@ -10,5 +10,8 @@ spec:
   to:
     kind: Service
     name: nginxsvc
+    weight: 100
+  port:
+    targetPort: 8080
   wildcardPolicy: None
 #  host: rancher-1-git-zztdietmaier-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com
