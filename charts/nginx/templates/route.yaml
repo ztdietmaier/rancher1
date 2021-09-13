@@ -6,7 +6,9 @@ metadata:
   name: route-unsecured
 spec:
   port:
-    targetPort: 10000-tcp
+    targetPort: 8080-tcp
   to:
     kind: Service
     name: nginxsvc
+  wildcardPolicy: None
+#  host: rancher-1-git-zztdietmaier-dev.apps.sandbox-m2.ll9k.p1.openshiftapps.com
