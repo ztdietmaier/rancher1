@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: camunda/camunda-bpm-platform:7.15.0
+        image: ztdietmaier/test1:main
         ports:
         - containerPort: 8080
         env:
