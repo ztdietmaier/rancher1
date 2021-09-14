@@ -18,7 +18,7 @@ on:
   # https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows
   push:
     # Edit to the branch(es) you want to build and deploy on each push.
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   openshift-ci-cd:
@@ -63,6 +63,10 @@ jobs:
       if: env.TAG == ''
       run: |
         echo "TAG=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
+
+    - name: Determine target namespace
+      if: github.BRANCH == 'develop'
+      run: "echo we are on develop"
 
     # The path the image was pushed to is now stored in ${{ steps.push-to-registry.outputs.registry-path }}
 
