@@ -1,0 +1,51 @@
+name: OpenShift
+concurrency: 
+  group: "helmoc"
+
+env:
+  REGISTRY: hub.docker.com/ztdietmaier
+  REGISTRY_USER: ztdietmaier
+  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+  OPENSHIFT_SERVER: https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443
+  OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+  APP_PORT: ""
+  OPENSHIFT_NAMESPACE: ""
+  APP_NAME: ""
+  TAG: ""
+
+
+on:
+  # https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows
+  push:
+    # Edit to the branch(es) you want to build and deploy on each push.
+    branches: [ main, develop ]
+
+jobs:
+  openshift-ci-cd:
+    name: Build and deploy to OpenShift
+    runs-on: ubuntu-18.04
+    environment: production
+
+    outputs:
+        ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
+        SELECTOR: ${{ steps.deploy-and-expose.outputs.selector }}
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+      
+    - name: Build and push Docker image for helm and oc
+      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      with:
+        context: ./build
+        push: true
+        tags: latest
+        labels: ztdietmaier/helmoc
+
+      
