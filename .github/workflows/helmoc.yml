@@ -51,7 +51,7 @@ jobs:
       with:
         context: ./build
         push: true
-        tags: "ztdietmaier/helmoc:1.0"
+        tags: "ztdietmaier/helmoc:1.1"
         labels: ${{ steps.meta.outputs.labels }}
 
       
