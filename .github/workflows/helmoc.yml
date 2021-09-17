@@ -1,4 +1,4 @@
-name: OpenShift
+name: HelmOc
 concurrency: 
   group: "helmoc"
 
