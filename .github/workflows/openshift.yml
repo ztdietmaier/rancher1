@@ -1,0 +1,93 @@
+name: OpenShift
+concurrency: 
+  group: "openshift"
+
+env:
+  REGISTRY: hub.docker.com/ztdietmaier
+  REGISTRY_USER: ztdietmaier
+  REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+  OPENSHIFT_SERVER: https://api.sandbox-m2.ll9k.p1.openshiftapps.com:6443
+  OPENSHIFT_TOKEN: ${{ secrets.OPENSHIFT_TOKEN }}
+  APP_PORT: ""
+  OPENSHIFT_NAMESPACE: ""
+  APP_NAME: ""
+  TAG: ""
+
+
+on:
+  # https://docs.github.com/en/free-pro-team@latest/actions/reference/events-that-trigger-workflows
+  push:
+    # Edit to the branch(es) you want to build and deploy on each push.
+    branches: [ main, develop ]
+
+jobs:
+  openshift-ci-cd:
+    name: Build and deploy to OpenShift
+    runs-on: ubuntu-18.04
+    environment: production
+
+    outputs:
+        ROUTE: ${{ steps.deploy-and-expose.outputs.route }}
+        SELECTOR: ${{ steps.deploy-and-expose.outputs.selector }}
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+      
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+      with:
+        images: ztdietmaier/test1
+      
+    - name: Build and push Docker image
+      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
+    - name: Determine app name
+      if: env.APP_NAME == ''
+      run: |
+        echo "APP_NAME=$(basename $PWD)" | tee -a $GITHUB_ENV
+    - name: Determine tag
+      if: env.TAG == ''
+      run: |
+        echo "TAG=${GITHUB_SHA::7}" | tee -a $GITHUB_ENV
+    - name: Determine target namespace
+      if: github.BRANCH == 'develop'
+      run: "echo we are on develop"
+
+    # The path the image was pushed to is now stored in ${{ steps.push-to-registry.outputs.registry-path }}
+
+    # oc-login works on all platforms, but oc must be installed first.
+    # The GitHub Ubuntu runner already includes oc.
+    # Otherwise, https://github.com/redhat-actions/openshift-tools-installer can be used to install oc,
+    # as well as many other tools.
+
+    # https://github.com/redhat-actions/oc-login#readme
+    - name: Log in to OpenShift
+      uses: redhat-actions/oc-login@v1
+      with:
+        openshift_server_url: ${{ env.OPENSHIFT_SERVER }}
+        openshift_token: ${{ env.OPENSHIFT_TOKEN }}
+        insecure_skip_tls_verify: true
+        namespace: zztdietmaier-dev
+        
+    - name: setup helm
+      uses: azure/setup-helm@v1
+      #uses: 'deliverybot/helm@master'
+      
+    - name: helm lint
+      run: "helm lint charts/nginx"
+      
+    - name: helm install
+      run: "helm upgrade --install nginx1 charts/nginx"
