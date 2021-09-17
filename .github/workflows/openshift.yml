@@ -54,6 +54,14 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
+    - name: Build and push Docker image for helm and oc
+      uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      with:
+        context: ./build
+        push: true
+        tags: latest
+        labels: ztdietmaier/helmoc
+
     - name: Determine app name
       if: env.APP_NAME == ''
       run: |
